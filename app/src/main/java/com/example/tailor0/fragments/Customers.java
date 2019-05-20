@@ -47,6 +47,7 @@ public class Customers extends Fragment {
     private OnFragmentInteractionListener mListener;
     private CustomerViewModel customerViewModel;
     public static final int NEW_CUSTOMER_ACTIVITY_REQUEST_CODE = 1;
+    public static final int UPD_CUSTOMER_ACTIVITY_REQUEST_CODE = 2;
     public Customers() {
         // Required empty public constructor
     }
@@ -84,7 +85,8 @@ public class Customers extends Fragment {
         View view = inflater.inflate(R.layout.fragment_customers, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
-        final CustomerListAdapter customerListAdapter = new CustomerListAdapter(view.getContext());
+//        final CustomerListAdapter customerListAdapter = new CustomerListAdapter(view.getContext());
+        final CustomerListAdapter customerListAdapter = new CustomerListAdapter(this);
         recyclerView.setAdapter(customerListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -116,17 +118,24 @@ public class Customers extends Fragment {
         return view;
     }
 
-//    @Override
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_CUSTOMER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+        if ((requestCode == NEW_CUSTOMER_ACTIVITY_REQUEST_CODE || requestCode == UPD_CUSTOMER_ACTIVITY_REQUEST_CODE) && resultCode == RESULT_OK) {
             Customer customer = new Customer();
-            customer.fio = data.getStringExtra("FIO");
-            customer.phone = data.getStringExtra("Phone");
-            customer.notes = data.getStringExtra("Notes");
-            customer.email = data.getStringExtra("Email");
-            customerViewModel.insert(customer);
+            customer.fio = data.getStringExtra("fio");
+            customer.phone = data.getStringExtra("phone");
+            customer.notes = data.getStringExtra("notes");
+            customer.email = data.getStringExtra("email");
+
+            if (requestCode == NEW_CUSTOMER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                customerViewModel.insert(customer);
+            }
+            if (requestCode == UPD_CUSTOMER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                customer.id = data.getLongExtra("id", 0);
+                customerViewModel.update(customer);
+            }
         }
     }
 

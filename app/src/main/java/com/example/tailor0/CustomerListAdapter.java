@@ -25,9 +25,14 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 //    private final View.OnClickListener mOnClickListener = new MyOnClickListener();
     private final LayoutInflater mInflater;
     private List<Customer> mCustomers = Collections.emptyList(); // Cached copy of words
+    private Fragment fragment;
 
     public CustomerListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
+    }
+    public CustomerListAdapter(Fragment myFragment) {
+        this.fragment = myFragment;
+        mInflater = myFragment.getLayoutInflater();
     }
 
     class CustomerViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
@@ -45,17 +50,20 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
 
         @Override
         public void onClick(View view) {
-            TextView itm = view.findViewById(R.id.tvName);
-            Toast.makeText(view.getContext(), itm.getText(), Toast.LENGTH_LONG).show();
+//            TextView itm = view.findViewById(R.id.tvName);
+//            Toast.makeText(view.getContext(), itm.getText(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(view.getContext(), current.phone, Toast.LENGTH_LONG).show();
             Customer current = mCustomers.get(getLayoutPosition());
-            Toast.makeText(view.getContext(), current.phone, Toast.LENGTH_LONG).show();
             Intent intent = new Intent(view.getContext(), NewCustomer.class);
             intent.putExtra("REQUEST_MODE", "edit");
+            intent.putExtra("id", current.id);
             intent.putExtra("fio", current.fio);
             intent.putExtra("phone", current.phone);
             intent.putExtra("notes", current.notes);
             intent.putExtra("email", current.email);
-            ((FragmentActivity) view.getContext()).startActivityForResult(intent, 2);
+            fragment.startActivityForResult(intent, 2);
+//            ((FragmentActivity) view.getContext()).startActivityForResult(intent, 2);
+
         }
     }
 

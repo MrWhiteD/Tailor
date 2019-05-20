@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 public class NewCustomer extends AppCompatActivity {
 
+    private long customerId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,7 @@ public class NewCustomer extends AppCompatActivity {
 
         String req_mode = getIntent().getStringExtra("REQUEST_MODE");
         if (req_mode.equals("edit")){
+            customerId = getIntent().getLongExtra("id", 0);
             etFIO.setText(getIntent().getStringExtra("fio"));
             etPhone.setText(getIntent().getStringExtra("phone"));
             etNotes.setText(getIntent().getStringExtra("notes"));
@@ -33,14 +35,15 @@ public class NewCustomer extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent replyIntent = new Intent();
+                replyIntent.putExtra("id", customerId);
                 String strFIO = etFIO.getText().toString();
-                replyIntent.putExtra("FIO", strFIO);
+                replyIntent.putExtra("fio", strFIO);
                 String strPhone = etPhone.getText().toString();
-                replyIntent.putExtra("Phone", strPhone);
+                replyIntent.putExtra("phone", strPhone);
                 String strNotes = etNotes.getText().toString();
-                replyIntent.putExtra("Notes", strNotes);
+                replyIntent.putExtra("notes", strNotes);
                 String strEmail = etEmail.getText().toString();
-                replyIntent.putExtra("Email", strEmail);
+                replyIntent.putExtra("email", strEmail);
 
                 setResult(RESULT_OK, replyIntent);
                 finish();
