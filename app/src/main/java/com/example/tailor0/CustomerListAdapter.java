@@ -23,6 +23,8 @@ import java.util.List;
 
 public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapter.CustomerViewHolder> {
 //    private final View.OnClickListener mOnClickListener = new MyOnClickListener();
+    private final LayoutInflater mInflater;
+    private List<Customer> mCustomers = Collections.emptyList(); // Cached copy of words
 
     public CustomerListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -56,10 +58,6 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
             ((FragmentActivity) view.getContext()).startActivityForResult(intent, 2);
         }
     }
-
-    private final LayoutInflater mInflater;
-    private List<Customer> mCustomers = Collections.emptyList(); // Cached copy of words
-
 
     @NonNull
     @Override
