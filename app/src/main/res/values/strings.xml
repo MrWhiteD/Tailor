@@ -17,4 +17,9 @@
     <string name="hello_blank_fragment3">Эскизы</string>
     <string name="title_activity_new_order">NewOrder</string>
     <string name="title_activity_new_sketch">NewSketch</string>
+    <string name="order_date_start">Дата заказа</string>
+    <string name="order_date_end">Дата сдачи</string>
+    <string name="order_comment">Комментарий</string>
+    <string name="dict_measure">Справочник мерок</string>
+    <string name="dict_prod_type">Справочник изделий</string>
 </resources>

@@ -12,14 +12,20 @@ import java.util.List;
 class CustomerRepository {
     private CustomerDao mCustomerDao;
     private LiveData<List<Customer>> mAllCust;
+    private List<Customer> mAllCust1;
 
     CustomerRepository(Application application){
         TailorRoomDatabase db = TailorRoomDatabase.getDatabase(application);
         mCustomerDao = db.customerDao();
-        mAllCust = mCustomerDao.getAlphabetizedCust();
     }
     LiveData<List<Customer>> getmAllCust(){
+        mAllCust = mCustomerDao.getAlphabetizedCust();
         return mAllCust;
+    }
+
+    List<Customer> getmAllCust1(){
+        mAllCust1 = mCustomerDao.getAll();
+        return mAllCust1;
     }
 
     void insert(Customer customer) {

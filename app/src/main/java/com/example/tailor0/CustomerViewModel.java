@@ -15,10 +15,10 @@ public class CustomerViewModel extends AndroidViewModel {
     public CustomerViewModel(@NonNull Application application) {
         super(application);
         customerRepository = new CustomerRepository(application);
-        mAllCust = customerRepository.getmAllCust();
     }
 
     public LiveData<List<Customer>> getAllCust() {
+        mAllCust = customerRepository.getmAllCust();
         return mAllCust;
     }
 

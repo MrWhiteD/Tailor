@@ -16,5 +16,13 @@
             android:id="@+id/nav_sketchers"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_sketchers" />
+        <item
+            android:id="@+id/nav_dictm"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/dict_measure" />
+        <item
+            android:id="@+id/nav_dict_prod"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/dict_prod_type" />
      </group>
 </menu>

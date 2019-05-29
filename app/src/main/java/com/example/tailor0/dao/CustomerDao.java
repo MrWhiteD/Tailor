@@ -15,6 +15,9 @@ public interface CustomerDao {
     @Query("SELECT * from customer ORDER BY fio ASC")
     LiveData<List<Customer>> getAlphabetizedCust();
 
+    @Query("SELECT * FROM customer")
+    List<Customer> getAll();
+
     @Insert
     void insert(Customer customer);
 

@@ -112,8 +112,8 @@ public class Customers extends Fragment {
                 startActivityForResult(intent, NEW_CUSTOMER_ACTIVITY_REQUEST_CODE);
             }
         });
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Клиенты");
+//        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+//        toolbar.setTitle("Клиенты");
         // Inflate the layout for this fragment
         return view;
     }
