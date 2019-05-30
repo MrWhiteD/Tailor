@@ -3,10 +3,8 @@ package com.example.tailor0;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
-import com.example.tailor0.DictRepository;
 import com.example.tailor0.entity.HandbkMerki;
 
 import java.util.List;
@@ -25,9 +23,4 @@ public class HandbkMerkiViewModel extends AndroidViewModel {
         mAllMerki = handbkMerkiRepo.getmAllMerki();
         return mAllMerki;
     }
-//    public LiveData<List<ProductType>> getAllProd() {
-//        mAllProd = productRepository.getmAllProd();
-//        return mAllProd;
-//    }
-
 }

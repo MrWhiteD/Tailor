@@ -1,9 +1,12 @@
 package com.example.tailor0.fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.tailor0.NewOrder;
 import com.example.tailor0.OrderActivity;
+import com.example.tailor0.OrdersViewModel;
 import com.example.tailor0.R;
 import com.example.tailor0.entity.Order;
+import com.example.tailor0.entity.ProductType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OrdersFragment extends Fragment {
@@ -60,7 +67,7 @@ public class OrdersFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = OrderActivity.newIntent(getContext(), null);
+                Intent intent = NewOrder.newIntent(getContext(), null);
                 startActivity(intent);
             }
         });
@@ -89,22 +96,21 @@ public class OrdersFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Вот здесь идет запрос к базе на выборку всех записей Order
-        // я сейчас просто заполню его парой объектов
-        orders = new ArrayList<>();
-        Order o1 = new Order(); o1.id = 1; o1.dateStart = "01.01.2019"; o1.dateEnd = "02.02.2019"; o1.note = "Первый заказ";
-        orders.add(o1);
-        Order o2 = new Order(); o2.id = 1; o2.dateStart = "03.03.2019"; o2.dateEnd = "04.04.2019"; o2.note = "Второй заказ";
-        orders.add(o2);
-
-        // Сообщаем адаптеру, что надо обновить данные
-        adapter.notifyDataSetChanged();
+        OrdersViewModel ordersViewModel = ViewModelProviders.of(this).get(OrdersViewModel.class);
+        ordersViewModel.getAllOrders().observe(this, new Observer<List<Order>>() {
+            @Override
+            public void onChanged(@Nullable final List<Order> orders) {
+//                 Update the cached copy of the words in the adapter.
+//                ((MyAdapter) packageTypesAdapter).setCustomer(customers);
+                adapter.setOrders(orders);
+            }
+        });
     }
 
     private void handleOnClick(Order order) {
         // А в этом месте передается объект заказа из элемента списка, которого коснулись
         // Соответственно мы здесь можем вызвать активити для редактирования заказа
-        Intent intent = OrderActivity.newIntent(getContext(), order.id);
+        Intent intent = NewOrder.newIntent(getContext(), order.id);
         startActivity(intent);
     }
 
@@ -143,7 +149,7 @@ public class OrdersFragment extends Fragment {
     }
 
     private class OrderAdapter extends RecyclerView.Adapter<OrderHolder>{
-
+        List<Order> mOrders = Collections.emptyList();
         @NonNull
         @Override
         public OrderHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -162,6 +168,11 @@ public class OrdersFragment extends Fragment {
         @Override
         public int getItemCount() {
             return orders.size();
+        }
+
+        public void setOrders(List<Order> orders) {
+            mOrders = orders;
+            notifyDataSetChanged();
         }
     }
 }

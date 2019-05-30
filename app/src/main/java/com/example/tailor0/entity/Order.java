@@ -10,9 +10,10 @@ public class Order {
 
     @PrimaryKey(autoGenerate = true)
     public long id;
-    public long empl_id;
+    public long cust_id;    /*id клиента*/
     public String dateStart; /*Дата приема*/
     public String dateEnd; /*Дата сдачи*/
+    public String dateFitting; /*Дата примерки*/
     public int cost;
     public int costprice;  /*себестоимость*/
     public String note; /*примечание*/
@@ -20,5 +21,4 @@ public class Order {
     public String materials;
     public boolean active;
     public String foto; /*Не знаю какой тип*/
-    public long fittingDate; /*Мерка дата*/
 }

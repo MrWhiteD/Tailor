@@ -15,12 +15,13 @@ import com.example.tailor0.fragments.Customers;
 import com.example.tailor0.fragments.HandbkMerkiFragment;
 import com.example.tailor0.fragments.HandbkProdFragment;
 import com.example.tailor0.fragments.Orders;
+import com.example.tailor0.fragments.OrdersFragment;
 import com.example.tailor0.fragments.Sketches;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    Orders forders;
+    OrdersFragment forders;
     Customers fcustomers;
     Sketches fsketches;
     HandbkProdFragment fhandbk_prod;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        forders = new Orders();
+        forders = new OrdersFragment();
         fcustomers = new Customers();
         fsketches = new Sketches();
 

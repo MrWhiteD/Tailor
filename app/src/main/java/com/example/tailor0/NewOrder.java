@@ -3,9 +3,11 @@ package com.example.tailor0;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +23,34 @@ import java.util.List;
 
 public class NewOrder extends AppCompatActivity {
 
+    private static final String EXTRA_ORDER_ID = "order_id";
+    private Long orderId;
+    public static Intent newIntent(Context context, Long orderId){
+        Intent i = new Intent(context, NewOrder.class);
+        i.putExtra(EXTRA_ORDER_ID, orderId);
+        return i;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_order);
 
-        final Spinner spinner = findViewById(R.id.spinnerEmpl);
-        final Button button = findViewById(R.id.btnSaveOrder);
+        orderId = getIntent().getLongExtra(EXTRA_ORDER_ID, -1);
+
+        Toolbar tool = findViewById(R.id.tbOrderCard);
+        final Spinner spinner = findViewById(R.id.spinCustomer);
+        final Button btnSaveOrder = findViewById(R.id.btnSaveOrder);
+        if(orderId == -1){
+            tool.setTitle("Новый заказ");
+            findViewById(R.id.tvCustomer).setVisibility(View.GONE);
+            findViewById(R.id.flImages).setVisibility(View.GONE);
+        } else {
+            tool.setTitle("Заказ номер " + orderId.toString());
+            spinner.setVisibility(View.GONE);
+            findViewById(R.id.tvCustomer).setVisibility(View.VISIBLE);
+        }
+
 
         CustomerViewModel customerViewModel = ViewModelProviders.of(this).get(CustomerViewModel.class);
 //        final ArrayAdapter packageTypesAdapter = new ArrayAdapter(this, R.layout.simple_spinner_item);
@@ -52,7 +75,7 @@ public class NewOrder extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(customerListAdapter);*/
 
-        button.setOnClickListener(new View.OnClickListener() {
+        btnSaveOrder.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 SpinnerAdapter spa = spinner.getAdapter();
                 int position = spinner.getSelectedItemPosition();
@@ -79,6 +102,12 @@ public class NewOrder extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void OnPhotoClick(View view) {
+    }
+
+    public void OnDrawClick(View view) {
     }
 
     // Creating an Adapter Class

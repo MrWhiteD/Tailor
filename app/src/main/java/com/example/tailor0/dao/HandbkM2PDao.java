@@ -20,6 +20,6 @@ public interface HandbkM2PDao {
     @Update
     void update(HandbkM2P handbkM2P);
 
-    @Query("Delete from handbk_merki")
+    @Query("Delete from handbk_m2p")
     void deleteAll();
 }

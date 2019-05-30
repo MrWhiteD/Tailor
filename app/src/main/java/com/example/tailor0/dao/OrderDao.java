@@ -13,6 +13,9 @@ import java.util.List;
 @Dao
 public interface OrderDao {
 
+    @Query("SELECT * from orders order by id")
+    LiveData<List<Order>> getAllOrders();
+
     @Query("SELECT * from orders where active = 1")
     LiveData<List<Order>> getActiveOrders();
 
