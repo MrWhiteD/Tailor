@@ -161,13 +161,13 @@ public class OrdersFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull OrderHolder orderHolder, int i) {
             // А здесь напрямую обращаемся к списку заказов в классе фрагмента
-            Order order = orders.get(i);
+            Order order = mOrders.get(i);
             orderHolder.bind(order);
         }
 
         @Override
         public int getItemCount() {
-            return orders.size();
+            return mOrders.size();
         }
 
         public void setOrders(List<Order> orders) {

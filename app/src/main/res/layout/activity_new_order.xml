@@ -91,11 +91,12 @@
                         android:text="Дата принятия\nзаказа" />
 
                     <EditText
-                        android:id="@+id/editText2"
+                        android:id="@+id/etDateStart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="date" />
+                        android:inputType="date"
+                        android:onClick="OnDateClick" />
 
                 </TableRow>
 
@@ -112,11 +113,12 @@
                         android:text="Дата первой\nпримерки" />
 
                     <EditText
-                        android:id="@+id/editText3"
+                        android:id="@+id/etDateFitting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="date" />
+                        android:inputType="date"
+                        android:onClick="OnDateClick" />
 
                 </TableRow>
 
@@ -133,11 +135,12 @@
                         android:text="Дата сдачи\nзаказа" />
 
                     <EditText
-                        android:id="@+id/editText4"
+                        android:id="@+id/etDateEnd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="date" />
+                        android:inputType="date"
+                        android:onClick="OnDateClick" />
 
                 </TableRow>
 

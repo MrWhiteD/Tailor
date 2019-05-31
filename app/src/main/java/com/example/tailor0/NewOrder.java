@@ -1,5 +1,6 @@
 package com.example.tailor0;
 
+import android.app.DatePickerDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -8,28 +9,39 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.example.tailor0.entity.Customer;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class NewOrder extends AppCompatActivity {
 
     private static final String EXTRA_ORDER_ID = "order_id";
+    private int DIALOG_DATE = 1;
     private Long orderId;
+    EditText etDateStart, etDateFitting, etDateEnd;
+
+    Calendar dateAndTime= Calendar.getInstance();
+
     public static Intent newIntent(Context context, Long orderId){
         Intent i = new Intent(context, NewOrder.class);
         i.putExtra(EXTRA_ORDER_ID, orderId);
         return i;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +49,12 @@ public class NewOrder extends AppCompatActivity {
         setContentView(R.layout.activity_new_order);
 
         orderId = getIntent().getLongExtra(EXTRA_ORDER_ID, -1);
+
+        etDateStart = findViewById(R.id.etDateStart);
+        etDateFitting = findViewById(R.id.etDateFitting);
+        etDateEnd = findViewById(R.id.etDateEnd);
+//        currentDateTime=(TextView)findViewById(R.id.currentDateTime);
+//        setInitialDateTime();
 
         Toolbar tool = findViewById(R.id.tbOrderCard);
         final Spinner spinner = findViewById(R.id.spinCustomer);
@@ -109,6 +127,33 @@ public class NewOrder extends AppCompatActivity {
 
     public void OnDrawClick(View view) {
     }
+
+    public void OnDateClick(View view) {
+        new DatePickerDialog(this, d,
+                dateAndTime.get(Calendar.YEAR),
+                dateAndTime.get(Calendar.MONTH),
+                dateAndTime.get(Calendar.DAY_OF_MONTH))
+                .show();
+        Log.d("sss", dateAndTime.toString());
+    }
+
+    // установка начальных даты и времени
+    private void setInitialDateTime(View view) {
+        etDateStart.setText(DateUtils.formatDateTime(this,
+                dateAndTime.getTimeInMillis(),
+                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
+                        | DateUtils.FORMAT_SHOW_TIME));
+    }
+
+    // установка обработчика выбора даты
+    DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            dateAndTime.set(Calendar.YEAR, year);
+            dateAndTime.set(Calendar.MONTH, monthOfYear);
+            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            setInitialDateTime(view);
+        }
+    };
 
     // Creating an Adapter Class
     class MyAdapter extends ArrayAdapter {
