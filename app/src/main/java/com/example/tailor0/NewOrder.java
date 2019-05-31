@@ -120,6 +120,39 @@ public class NewOrder extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.etDateStart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(NewOrder.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // вот здесь устанавливаешь значение переменной и снова выводишь отформатированную строку в текстовое поле
+                    }
+                },
+                        // Я бы хранил даты отдельно в переменных, а в текстовые поля выводил отформатированные строки
+                        dateAndTime.get(Calendar.YEAR),
+                        dateAndTime.get(Calendar.MONTH),
+                        dateAndTime.get(Calendar.DAY_OF_MONTH))
+                        .show();
+                Log.d("sss", dateAndTime.toString());
+            }
+        });
+
+        findViewById(R.id.etDateFitting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        findViewById(R.id.etDateEnd).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     public void OnPhotoClick(View view) {
