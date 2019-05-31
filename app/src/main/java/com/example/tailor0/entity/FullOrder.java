@@ -1,15 +1,6 @@
 package com.example.tailor0.entity;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-
-import java.util.Date;
-
-@Entity(tableName = "orders")
-public class Order {
-
-    @PrimaryKey(autoGenerate = true)
+public class FullOrder {
     public long id;
     public long cust_id;    /*id клиента*/
     public String dateStart; /*Дата приема*/
@@ -22,4 +13,6 @@ public class Order {
     public String materials;
     public boolean active;
     public String foto; /*Не знаю какой тип*/
+    public String fio;
+    public String prod_name;
 }

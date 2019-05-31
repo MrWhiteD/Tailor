@@ -17,15 +17,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.tailor0.NewOrder;
-import com.example.tailor0.OrderActivity;
 import com.example.tailor0.OrdersViewModel;
 import com.example.tailor0.R;
+import com.example.tailor0.entity.FullOrder;
 import com.example.tailor0.entity.Order;
-import com.example.tailor0.entity.ProductType;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class OrdersFragment extends Fragment {
     private OrderAdapter adapter;
@@ -37,9 +37,11 @@ public class OrdersFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private RecyclerView recyclerView;
-
+    private OrdersViewModel ordersViewModel;
+    private static final int NEW_ORDER_ACTIVITY_REQUEST_CODE = 1;
+    private static final int UPD_ORDER_ACTIVITY_REQUEST_CODE = 2;
     // Это отображаемый список заказов. Вначале он заполняется из базы, а затем отображается в адаптере
-    private List<Order> orders;
+//    private List<FullOrder> fullOrders;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -76,7 +78,16 @@ public class OrdersFragment extends Fragment {
         recyclerView = view.findViewById(R.id.orders_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-        // Inflate the layout for this fragment
+        ordersViewModel = ViewModelProviders.of(this).get(OrdersViewModel.class);
+        ordersViewModel.getFullOrders().observe(this, new Observer<List<FullOrder>>() {
+            @Override
+            public void onChanged(@Nullable final List<FullOrder> fullOrders) {
+//                 Update the cached copy of the words in the adapter.
+//                ((MyAdapter) packageTypesAdapter).setCustomer(customers);
+                adapter.setOrders(fullOrders);
+            }
+        });
+// Inflate the layout for this fragment
         return view;
     }
 
@@ -93,63 +104,81 @@ public class OrdersFragment extends Fragment {
         mListener = null;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        OrdersViewModel ordersViewModel = ViewModelProviders.of(this).get(OrdersViewModel.class);
-        ordersViewModel.getAllOrders().observe(this, new Observer<List<Order>>() {
-            @Override
-            public void onChanged(@Nullable final List<Order> orders) {
-//                 Update the cached copy of the words in the adapter.
-//                ((MyAdapter) packageTypesAdapter).setCustomer(customers);
-                adapter.setOrders(orders);
-            }
-        });
-    }
 
-    private void handleOnClick(Order order) {
+    private void handleOnClick(FullOrder fullOrder) {
         // А в этом месте передается объект заказа из элемента списка, которого коснулись
         // Соответственно мы здесь можем вызвать активити для редактирования заказа
-        Intent intent = NewOrder.newIntent(getContext(), order.id);
-        startActivity(intent);
+        Intent intent = NewOrder.newIntent(getContext(), fullOrder.id);
+        intent.putExtra("dateStart", fullOrder.dateStart);
+        intent.putExtra("dateFitting", fullOrder.dateFitting);
+        intent.putExtra("dateEnd", fullOrder.dateEnd);
+        intent.putExtra("note", fullOrder.note);
+        intent.putExtra("cust_id", fullOrder.cust_id);
+        intent.putExtra("cust_fio", fullOrder.fio);
+        intent.putExtra("productType_id", fullOrder.productType_id);
+        intent.putExtra("productType_name", fullOrder.prod_name);
+        startActivityForResult(intent, 2);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == NEW_ORDER_ACTIVITY_REQUEST_CODE || requestCode == UPD_ORDER_ACTIVITY_REQUEST_CODE) && resultCode == RESULT_OK) {
+            Order order = new Order();
+            order.dateStart = data.getStringExtra("dateStart");
+            order.dateFitting = data.getStringExtra("dateFitting");
+            order.dateEnd = data.getStringExtra("dateEnd");
+            order.note = data.getStringExtra("note");
+            order.productType_id = data.getLongExtra("productType_id", 0);
+
+            if (requestCode == NEW_ORDER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                order.cust_id = data.getLongExtra("cust_id", 0);
+                ordersViewModel.insert(order);
+            }
+            if (requestCode == UPD_ORDER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                order.id = data.getLongExtra("orderId", 0);
+                ordersViewModel.update(order);
+            }
+        }
     }
 
 
     private class OrderHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        Order order;
+        FullOrder fullOrder;
 
-        TextView dateStart;
-        TextView dateEnd;
-        TextView comment;
+        TextView tvDateStart, tvDateEnd, tvProdType, tvOrderId, tvCustomer;
 
         public OrderHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
 
-            dateStart = itemView.findViewById(R.id.order_date_start);
-            dateEnd = itemView.findViewById(R.id.order_date_end);
-            comment = itemView.findViewById(R.id.order_comment);
+            tvOrderId = itemView.findViewById(R.id.tvOrderId);
+            tvCustomer = itemView.findViewById(R.id.tvCustomer);
+            tvDateStart = itemView.findViewById(R.id.tvDateStart);
+            tvDateEnd = itemView.findViewById(R.id.tvDateEnd);
+            tvProdType = itemView.findViewById(R.id.tvProdtype);
 
         }
 
         @Override
         public void onClick(View v) {
-
-            handleOnClick(order);
-
+            handleOnClick(fullOrder);
         }
 
-        public void bind(Order order){
-            this.order = order;
-            dateStart.setText(order.dateStart);
-            dateEnd.setText(order.dateEnd);
-            comment.setText(order.note);
+        public void bind(FullOrder fullOrder){
+            this.fullOrder = fullOrder;
+            tvOrderId.setText(Long.toString(fullOrder.id));
+            tvCustomer.setText(fullOrder.fio);
+            tvDateStart.setText(fullOrder.dateStart);
+            tvDateEnd.setText(fullOrder.dateEnd);
+            tvProdType.setText(fullOrder.prod_name);
         }
     }
 
     private class OrderAdapter extends RecyclerView.Adapter<OrderHolder>{
-        List<Order> mOrders = Collections.emptyList();
+        List<FullOrder> mOrders = Collections.emptyList();
         @NonNull
         @Override
         public OrderHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -161,8 +190,8 @@ public class OrdersFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull OrderHolder orderHolder, int i) {
             // А здесь напрямую обращаемся к списку заказов в классе фрагмента
-            Order order = mOrders.get(i);
-            orderHolder.bind(order);
+            FullOrder fullOrder = mOrders.get(i);
+            orderHolder.bind(fullOrder);
         }
 
         @Override
@@ -170,8 +199,8 @@ public class OrdersFragment extends Fragment {
             return mOrders.size();
         }
 
-        public void setOrders(List<Order> orders) {
-            mOrders = orders;
+        public void setOrders(List<FullOrder> fullOrders) {
+            mOrders = fullOrders;
             notifyDataSetChanged();
         }
     }

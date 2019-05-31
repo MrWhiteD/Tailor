@@ -95,8 +95,8 @@ public class HandbkMerkiFragment extends Fragment {
             this.handbkMerki = handbkMerki;
             tvShortName.setText(handbkMerki.short_name);
             tvName.setText(handbkMerki.name);
-//            dateEnd.setText(order.dateEnd);
-//            comment.setText(order.note);
+//            tvDateEnd.setText(order.tvDateEnd);
+//            tvProdType.setText(order.note);
         }
     }
 

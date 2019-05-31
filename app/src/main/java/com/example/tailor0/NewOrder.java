@@ -32,7 +32,11 @@ public class NewOrder extends AppCompatActivity {
     private static final String EXTRA_ORDER_ID = "order_id";
     private int DIALOG_DATE = 1;
     private Long orderId;
-    EditText etDateStart, etDateFitting, etDateEnd;
+
+    EditText etDateStart, etDateFitting, etDateEnd, etNotes;
+    TextView tvCustomer;
+    private Spinner spinCustomer, spinProdType;
+    private  ArrayAdapter packageTypesAdapter;
 
     Calendar dateAndTime= Calendar.getInstance();
 
@@ -50,76 +54,90 @@ public class NewOrder extends AppCompatActivity {
 
         orderId = getIntent().getLongExtra(EXTRA_ORDER_ID, -1);
 
+        tvCustomer = findViewById(R.id.tvCustomer);
+        spinProdType = findViewById(R.id.spinProdType);
         etDateStart = findViewById(R.id.etDateStart);
         etDateFitting = findViewById(R.id.etDateFitting);
         etDateEnd = findViewById(R.id.etDateEnd);
-//        currentDateTime=(TextView)findViewById(R.id.currentDateTime);
-//        setInitialDateTime();
+        etNotes = findViewById(R.id.etNotes);
 
         Toolbar tool = findViewById(R.id.tbOrderCard);
-        final Spinner spinner = findViewById(R.id.spinCustomer);
+        spinCustomer = findViewById(R.id.spinCustomer);
         final Button btnSaveOrder = findViewById(R.id.btnSaveOrder);
         if(orderId == -1){
             tool.setTitle("Новый заказ");
             findViewById(R.id.tvCustomer).setVisibility(View.GONE);
             findViewById(R.id.flImages).setVisibility(View.GONE);
+            CustomerViewModel customerViewModel = ViewModelProviders.of(this).get(CustomerViewModel.class);
+//        final ArrayAdapter packageTypesAdapter = new ArrayAdapter(this, R.layout.simple_spinner_item);
+            packageTypesAdapter = new MyAdapter(this, R.layout.simple_spinner_item);
+//        spinCustomer.setAdapter(new MyAdapter(this, R.layout.simple_spinner_item));
+            spinCustomer.setAdapter(packageTypesAdapter);
+            customerViewModel.getAllCust().observe(this, new Observer<List<Customer>>() {
+                @Override
+                public void onChanged(@Nullable final List<Customer> customers) {
+                    // Update the cached copy of the words in the adapter.
+//                ((MyAdapter) packageTypesAdapter).setCustomer(customers);
+                    for(int i=0; i<customers.size(); i++) {
+                        packageTypesAdapter.add(customers.get(i));
+                    }
+                }
+            });
+            packageTypesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         } else {
             tool.setTitle("Заказ номер " + orderId.toString());
-            spinner.setVisibility(View.GONE);
+            spinCustomer.setVisibility(View.GONE);
             findViewById(R.id.tvCustomer).setVisibility(View.VISIBLE);
+            tvCustomer.setText(getIntent().getStringExtra("cust_fio"));
+            etDateStart.setText(getIntent().getStringExtra("dateStart"));
+            etDateFitting.setText(getIntent().getStringExtra("dateFitting"));
+            etDateEnd.setText(getIntent().getStringExtra("dateEnd"));
+            etNotes.setText(getIntent().getStringExtra("note"));
         }
 
 
-        CustomerViewModel customerViewModel = ViewModelProviders.of(this).get(CustomerViewModel.class);
-//        final ArrayAdapter packageTypesAdapter = new ArrayAdapter(this, R.layout.simple_spinner_item);
-        final ArrayAdapter packageTypesAdapter = new MyAdapter(this, R.layout.simple_spinner_item);
-//        spinner.setAdapter(new MyAdapter(this, R.layout.simple_spinner_item));
-        spinner.setAdapter(packageTypesAdapter);
-        customerViewModel.getAllCust().observe(this, new Observer<List<Customer>>() {
-            @Override
-            public void onChanged(@Nullable final List<Customer> customers) {
-                // Update the cached copy of the words in the adapter.
-//                ((MyAdapter) packageTypesAdapter).setCustomer(customers);
-                for(int i=0; i<customers.size(); i++) {
-                    packageTypesAdapter.add(customers.get(i));
-                }
-            }
-        });
-        packageTypesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line,
-                mAllCust);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(customerListAdapter);*/
-
         btnSaveOrder.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                SpinnerAdapter spa = spinner.getAdapter();
-                int position = spinner.getSelectedItemPosition();
-                Customer customer = (Customer) packageTypesAdapter.getItem(position);
-
-//
-
+            @Override
+            public void onClick(View v) {
+                onSave();
 //                packageTypesAdapter.getPosition()
 /*
-                Intent replyIntent = new Intent();
-                replyIntent.putExtra("id", customerId);
-                String strFIO = etFIO.getText().toString();
-                replyIntent.putExtra("fio", strFIO);
-                String strPhone = etPhone.getText().toString();
-                replyIntent.putExtra("phone", strPhone);
-                String strNotes = etNotes.getText().toString();
-                replyIntent.putExtra("notes", strNotes);
-                String strEmail = etEmail.getText().toString();
-                replyIntent.putExtra("email", strEmail);
-
-                setResult(RESULT_OK, replyIntent);
-                finish();
 */
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Вот здесь нужно из базы вытащить этот заказ и по нему заполнить поля, если, конечно, это не создание нового заказа
+        if(orderId != null){
+            // Вытаскиваем и заполняем
+        }
+    }
+
+    private void onSave() {
+        Intent replyIntent = new Intent();
+
+        if(orderId != null){
+            replyIntent.putExtra("id", orderId);
+        }else {
+            SpinnerAdapter spa = spinCustomer.getAdapter();
+            int position = spinCustomer.getSelectedItemPosition();
+            Customer customer = (Customer) packageTypesAdapter.getItem(position);
+            replyIntent.putExtra("cust_id", customer.id);
+        }
+
+        replyIntent.putExtra("dateStart", etDateStart.getText().toString());
+        replyIntent.putExtra("dateFitting", etDateFitting.getText().toString());
+        replyIntent.putExtra("dateEnd", etDateEnd.getText().toString());
+        replyIntent.putExtra("note", etNotes.getText().toString());
+//        replyIntent.putExtra("productType_id", prodtype.id);
+
+        setResult(RESULT_OK, replyIntent);
+
+        finish();
     }
 
     public void OnPhotoClick(View view) {
@@ -128,8 +146,20 @@ public class NewOrder extends AppCompatActivity {
     public void OnDrawClick(View view) {
     }
 
-    public void OnDateClick(View view) {
-        new DatePickerDialog(this, d,
+    public void OnDateClick(final View view) {
+        new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker dpview, int year, int month, int dayOfMonth) {
+                        if(view.getId() == R.id.etDateStart){
+                            etDateStart.setText(dayOfMonth + "." + month + "." + year);
+                        } else if(view.getId() == R.id.etDateFitting){
+                            etDateFitting.setText(dayOfMonth + "." + month + "." + year);
+                        }if(view.getId() == R.id.etDateEnd){
+                            etDateEnd.setText(dayOfMonth + "." + month + "." + year);
+                        }
+                    }
+                },
                 dateAndTime.get(Calendar.YEAR),
                 dateAndTime.get(Calendar.MONTH),
                 dateAndTime.get(Calendar.DAY_OF_MONTH))

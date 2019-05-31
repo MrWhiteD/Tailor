@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import com.example.tailor0.dao.CustomerDao;
 import com.example.tailor0.dao.OrderDao;
 import com.example.tailor0.entity.Customer;
+import com.example.tailor0.entity.FullOrder;
 import com.example.tailor0.entity.Order;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 class OrdersRepository {
     private OrderDao mOrderDao;
     private LiveData<List<Order>> mAllOrders;
+    private LiveData<List<FullOrder>> mFullOrders;
 
     OrdersRepository(Application application){
         TailorRoomDatabase db = TailorRoomDatabase.getDatabase(application);
@@ -22,6 +24,11 @@ class OrdersRepository {
     LiveData<List<Order>> getmAllOrder(){
         mAllOrders = mOrderDao.getAllOrders();
         return mAllOrders;
+    }
+
+    LiveData<List<FullOrder>> getFullOrder(){
+        mFullOrders = mOrderDao.getFullOrders();
+        return mFullOrders;
     }
 
     void insert(Order order) {

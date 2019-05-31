@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Database(entities = {Order.class, Customer.class, ProductType.class, HandbkMerki.class, HandbkM2P.class}, version = 8, exportSchema = false)
+@Database(entities = {Order.class, Customer.class, ProductType.class, HandbkMerki.class, HandbkM2P.class}, version = 10, exportSchema = false)
 public abstract class TailorRoomDatabase extends RoomDatabase {
     public abstract OrderDao orderDao();
     public abstract CustomerDao customerDao();
@@ -90,8 +90,11 @@ public abstract class TailorRoomDatabase extends RoomDatabase {
 
             Order order = new Order();
 
-            order.cost = 100;
+            order.cust_id = 1;
+            order.productType_id = 2;
             order.dateStart = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
+            order.dateFitting = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
+            order.dateEnd = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
             order.note = "несколько слов о заказе";
             orderDao.insert(order);
 

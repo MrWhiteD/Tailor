@@ -115,9 +115,9 @@ public class HandbkProdFragment extends Fragment {
         // Вот здесь идет запрос к базе на выборку всех записей Order
         // я сейчас просто заполню его парой объектов
 //        orders = new ArrayList<>();
-//        Order o1 = new Order(); o1.id = 1; o1.dateStart = "01.01.2019"; o1.dateEnd = "02.02.2019"; o1.note = "Первый заказ";
+//        Order o1 = new Order(); o1.id = 1; o1.tvDateStart = "01.01.2019"; o1.tvDateEnd = "02.02.2019"; o1.note = "Первый заказ";
 //        orders.add(o1);
-//        Order o2 = new Order(); o2.id = 1; o2.dateStart = "03.03.2019"; o2.dateEnd = "04.04.2019"; o2.note = "Второй заказ";
+//        Order o2 = new Order(); o2.id = 1; o2.tvDateStart = "03.03.2019"; o2.tvDateEnd = "04.04.2019"; o2.note = "Второй заказ";
 //        orders.add(o2);
 
         // Сообщаем адаптеру, что надо обновить данные
@@ -145,8 +145,8 @@ public class HandbkProdFragment extends Fragment {
             itemView.setOnClickListener(this);
 
             dateStart = itemView.findViewById(R.id.dictName);
-//            dateEnd = itemView.findViewById(R.id.order_date_end);
-//            comment = itemView.findViewById(R.id.order_comment);
+//            tvDateEnd = itemView.findViewById(R.id.order_date_end);
+//            tvProdType = itemView.findViewById(R.id.order_comment);
 
         }
 
@@ -160,8 +160,8 @@ public class HandbkProdFragment extends Fragment {
         public void bind(ProductType productType){
             this.productType = productType;
             dateStart.setText(productType.name);
-//            dateEnd.setText(order.dateEnd);
-//            comment.setText(order.note);
+//            tvDateEnd.setText(order.tvDateEnd);
+//            tvProdType.setText(order.note);
         }
     }
 
