@@ -29,7 +29,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Database(entities = {Order.class, Customer.class, ProductType.class, HandbkMerki.class, HandbkM2P.class, Cust2Merki.class}, version = 15, exportSchema = false)
+@Database(entities = {Order.class, Customer.class, ProductType.class, HandbkMerki.class, HandbkM2P.class, Cust2Merki.class}, version = 16, exportSchema = false)
 public abstract class TailorRoomDatabase extends RoomDatabase {
     public abstract OrderDao orderDao();
     public abstract CustomerDao customerDao();

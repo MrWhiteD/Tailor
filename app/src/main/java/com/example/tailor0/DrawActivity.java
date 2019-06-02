@@ -137,8 +137,9 @@ public class DrawActivity extends AppCompatActivity {
             mCanvas.drawPath(mPath, mPaint);
 // kill this so we don't double draw
             mPath.reset();
-//            mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SCREEN));
-//mPaint.setMaskFilter(null);
+            mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SCREEN));
+            mPaint.setMaskFilter(null);
+            mPaint.setColor(0xFFFF0000);
         }
 
         @Override

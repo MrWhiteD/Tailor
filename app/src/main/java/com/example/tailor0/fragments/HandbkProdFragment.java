@@ -72,13 +72,13 @@ public class HandbkProdFragment extends Fragment {
 
         if ((requestCode == NEW_PROD_ACTIVITY_REQUEST_CODE || requestCode == UPD_PROD_ACTIVITY_REQUEST_CODE) && resultCode == RESULT_OK) {
             ProductType productType = new ProductType();
-            productType.id = data.getLongExtra("id", 0);
-            productType.name = data.getStringExtra("name");
-            productType.notes = data.getStringExtra("notes");
-
-            if (requestCode == NEW_PROD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-                productViewModel.insert(productType);
+            if (requestCode == UPD_PROD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                productType.id = data.getLongExtra("prodTypeId", 0);
             }
+            productType.name = data.getStringExtra("prodTypeName");
+            productType.notes = data.getStringExtra("prodTypeNotes");
+
+            productViewModel.insert(productType);
         }
     }
 
@@ -125,32 +125,17 @@ public class HandbkProdFragment extends Fragment {
         super.onResume();
 
         productViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
-//        final ArrayAdapter packageTypesAdapter = new NewOrder.MyAdapter(this, R.layout.simple_spinner_item);
-//        spinner.setAdapter(new MyAdapter(this, R.layout.simple_spinner_item));
-//        productTypes = productViewModel.getAllProd();
         productViewModel.getAllProd().observe(this, new Observer<List<ProductType>>() {
             @Override
             public void onChanged(@Nullable final List<ProductType> productTps) {
-//                 Update the cached copy of the words in the adapter.
-//                ((MyAdapter) packageTypesAdapter).setCustomer(customers);
                 adapter.setProduct(productTps);
             }
         });
-        // Вот здесь идет запрос к базе на выборку всех записей Order
-        // я сейчас просто заполню его парой объектов
-//        orders = new ArrayList<>();
-//        Order o1 = new Order(); o1.id = 1; o1.tvDateStart = "01.01.2019"; o1.tvDateEnd = "02.02.2019"; o1.note = "Первый заказ";
-//        orders.add(o1);
-//        Order o2 = new Order(); o2.id = 1; o2.tvDateStart = "03.03.2019"; o2.tvDateEnd = "04.04.2019"; o2.note = "Второй заказ";
-//        orders.add(o2);
 
-        // Сообщаем адаптеру, что надо обновить данные
         adapter.notifyDataSetChanged();
     }
 
     private void handleOnClick(ProductType productType) {
-        // А в этом месте передается объект заказа из элемента списка, которого коснулись
-        // Соответственно мы здесь можем вызвать активити для редактирования заказа
         Intent intent = new Intent(getActivity(), NewProdType.class);
         intent.putExtra("prodTypeId", productType.id);
         intent.putExtra("prodTypeName", productType.name);

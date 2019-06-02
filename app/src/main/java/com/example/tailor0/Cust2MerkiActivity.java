@@ -88,7 +88,12 @@ public class Cust2MerkiActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull Cust2MerkiHolder cust2MerkiHolder, int i) {
             // А здесь напрямую обращаемся к списку заказов в классе фрагмента
             FullCust2Merki fullCust2Merki = mFullCust2Merki.get(i);
-            cust2MerkiHolder.bind(fullCust2Merki);
+//            cust2MerkiHolder.bind(fullCust2Merki);
+            cust2MerkiHolder.tvMerkaName.setText(fullCust2Merki.merka_id + ". " + fullCust2Merki.merka_name + "(" + fullCust2Merki.merka_short_name + ")");
+            if (fullCust2Merki.val != 0)
+                cust2MerkiHolder.etVal.setText(Long.toString(fullCust2Merki.val));
+            else
+                cust2MerkiHolder.etVal.setText("");
         }
 
         @Override
@@ -106,8 +111,8 @@ public class Cust2MerkiActivity extends AppCompatActivity {
 
             FullCust2Merki fullCust2Merki;
 
-            TextView tvMerkaName;
-            EditText etVal;
+            private final TextView tvMerkaName;
+            private final EditText etVal;
             TextView dateEnd;
             TextView comment;
 
@@ -127,7 +132,11 @@ public class Cust2MerkiActivity extends AppCompatActivity {
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
 //                        mFullCust2Merki.get(getAdapterPosition()).setEditTextValue(etVal.getText().toString());
-                        mFullCust2Merki.get(getAdapterPosition()).val = Long.parseLong(etVal.getText().toString());
+                        if (!etVal.getText().toString().equals(""))
+                            mFullCust2Merki.get(getAdapterPosition()).val = Long.parseLong(etVal.getText().toString());
+                        else
+                            mFullCust2Merki.get(getAdapterPosition()).val = 0;
+
 //                                .setEditTextValue(etVal.getText().toString());
 //                        mFullCust2Merki.
                     }
@@ -144,7 +153,7 @@ public class Cust2MerkiActivity extends AppCompatActivity {
             public void bind(FullCust2Merki fullCust2Merki){
                 this.fullCust2Merki = fullCust2Merki;
 //            tvMerkaName.setText(Long.toString(fullCust2Merki.merka_name));
-                tvMerkaName.setText(fullCust2Merki.merka_name);
+                tvMerkaName.setText(fullCust2Merki.merka_id + ". " + fullCust2Merki.merka_name + "(" + fullCust2Merki.merka_short_name + ")");
                 if (fullCust2Merki.val != 0){
                     etVal.setText(Long.toString(fullCust2Merki.val));
                 }

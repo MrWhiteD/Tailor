@@ -125,7 +125,7 @@ public class NewOrder extends AppCompatActivity {
             spinCustomer.setVisibility(View.GONE);
             findViewById(R.id.tvCustomer).setVisibility(View.VISIBLE);
             tvCustomer.setText(getIntent().getStringExtra("cust_fio"));
-            etDateStart.setText(getIntent().getStringExtra("tvMerkaName"));
+            etDateStart.setText(getIntent().getStringExtra("dateStart"));
             etDateFitting.setText(getIntent().getStringExtra("dateFitting"));
             etDateEnd.setText(getIntent().getStringExtra("dateEnd"));
             etNotes.setText(getIntent().getStringExtra("note"));
@@ -172,7 +172,7 @@ public class NewOrder extends AppCompatActivity {
         ProductType productType = (ProductType) spinProdType.getSelectedItem();
 //        SpinnerAdapter spa1 = spinProdType.getAdapter();
         ;
-        replyIntent.putExtra("tvMerkaName", etDateStart.getText().toString());
+        replyIntent.putExtra("dateStart", etDateStart.getText().toString());
         replyIntent.putExtra("dateFitting", etDateFitting.getText().toString());
         replyIntent.putExtra("dateEnd", etDateEnd.getText().toString());
         replyIntent.putExtra("note", etNotes.getText().toString());
