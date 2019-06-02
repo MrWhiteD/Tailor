@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".NewCustomer">
+    tools:context=".NewProdType"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/tbCustCard"
+        android:id="@+id/tbProdTypeCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="Новый клиент" />
+        app:title="Новый вид изделия" />
+
     <EditText
         android:id="@+id/etFio"
         android:layout_width="wrap_content"
@@ -27,42 +28,18 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/etPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="20dp"
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="272dp"
         android:ems="10"
-        android:hint="Телефон"
-        android:inputType="phone" />
-
-    <EditText
-        android:id="@+id/etEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="E-mail"
-        android:inputType="textEmailAddress" />
-
-    <EditText
-        android:id="@+id/etNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Примечания"
-        android:inputType="textPersonName" />
-
+        android:inputType="textPersonName"
+        android:text="Name" />
     <Button
         android:id="@+id/btnSaveCust"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:text="Сохранить" />
+
+
 </LinearLayout>

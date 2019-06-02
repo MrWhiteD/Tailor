@@ -2,6 +2,7 @@ package com.example.tailor0.fragments;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.tailor0.NewProdType;
 import com.example.tailor0.OrderActivity;
 import com.example.tailor0.ProductViewModel;
 import com.example.tailor0.R;
@@ -24,9 +26,14 @@ import com.example.tailor0.entity.ProductType;
 import java.util.Collections;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public class HandbkProdFragment extends Fragment {
     private HandbkAdapter adapter;
     private String mHandbkType; //Параметр - тип справочника
+    public static final int NEW_PROD_ACTIVITY_REQUEST_CODE = 1;
+    public static final int UPD_PROD_ACTIVITY_REQUEST_CODE = 2;
+    ProductViewModel productViewModel;
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
@@ -60,6 +67,22 @@ public class HandbkProdFragment extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == NEW_PROD_ACTIVITY_REQUEST_CODE || requestCode == UPD_PROD_ACTIVITY_REQUEST_CODE) && resultCode == RESULT_OK) {
+            ProductType productType = new ProductType();
+            productType.id = data.getLongExtra("id", 0);
+            productType.name = data.getStringExtra("name");
+            productType.notes = data.getStringExtra("notes");
+
+            if (requestCode == NEW_PROD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                productViewModel.insert(productType);
+            }
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_handbk, container, false);
 
@@ -70,8 +93,9 @@ public class HandbkProdFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = OrderActivity.newIntent(getContext(), null);
-                startActivity(intent);
+                Intent intent = new Intent(getActivity(), NewProdType.class);
+                intent.putExtra("prodTypeId", -1);
+                startActivityForResult(intent, NEW_PROD_ACTIVITY_REQUEST_CODE);
             }
         });
         adapter = new HandbkAdapter();
@@ -100,7 +124,7 @@ public class HandbkProdFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        ProductViewModel productViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+        productViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
 //        final ArrayAdapter packageTypesAdapter = new NewOrder.MyAdapter(this, R.layout.simple_spinner_item);
 //        spinner.setAdapter(new MyAdapter(this, R.layout.simple_spinner_item));
 //        productTypes = productViewModel.getAllProd();
@@ -127,8 +151,12 @@ public class HandbkProdFragment extends Fragment {
     private void handleOnClick(ProductType productType) {
         // А в этом месте передается объект заказа из элемента списка, которого коснулись
         // Соответственно мы здесь можем вызвать активити для редактирования заказа
-        Intent intent = OrderActivity.newIntent(getContext(), productType.id);
-        startActivity(intent);
+        Intent intent = new Intent(getActivity(), NewProdType.class);
+        intent.putExtra("prodTypeId", productType.id);
+        intent.putExtra("prodTypeName", productType.name);
+        intent.putExtra("prodTypeNotes", productType.notes);
+
+        startActivityForResult(intent, UPD_PROD_ACTIVITY_REQUEST_CODE);
     }
 
 

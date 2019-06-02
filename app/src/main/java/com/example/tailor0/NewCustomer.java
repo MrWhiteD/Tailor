@@ -3,6 +3,7 @@ package com.example.tailor0;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ public class NewCustomer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_customer);
 
+        Toolbar tbCustCard = findViewById(R.id.tbCustCard);
         final EditText etFIO = findViewById(R.id.etFio);
         final EditText etPhone = findViewById(R.id.etPhone);
         final EditText etNotes = findViewById(R.id.etNotes);
@@ -26,12 +28,14 @@ public class NewCustomer extends AppCompatActivity {
 
         String req_mode = getIntent().getStringExtra("REQUEST_MODE");
         if (req_mode.equals("edit")){
+            tbCustCard.setTitle("Клиент " + getIntent().getStringExtra("fio"));
             customerId = getIntent().getLongExtra("id", 0);
             etFIO.setText(getIntent().getStringExtra("fio"));
             etPhone.setText(getIntent().getStringExtra("phone"));
             etNotes.setText(getIntent().getStringExtra("notes"));
             etEmail.setText(getIntent().getStringExtra("email"));
         }
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent replyIntent = new Intent();

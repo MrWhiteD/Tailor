@@ -17,7 +17,7 @@
         <activity android:name=".Tab.Completed" />
         <activity android:name=".Tab.Active" />
         <activity
-            android:name=".NewSketch"
+            android:name=".NewProdType"
             android:label="@string/title_activity_new_sketch"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
