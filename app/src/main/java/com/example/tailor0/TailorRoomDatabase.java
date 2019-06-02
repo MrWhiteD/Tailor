@@ -10,11 +10,13 @@ import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import com.example.tailor0.dao.Cust2MerkiDao;
 import com.example.tailor0.dao.CustomerDao;
 import com.example.tailor0.dao.HandbkM2PDao;
 import com.example.tailor0.dao.HandbkMerkiDao;
 import com.example.tailor0.dao.OrderDao;
 import com.example.tailor0.dao.ProductTypeDao;
+import com.example.tailor0.entity.Cust2Merki;
 import com.example.tailor0.entity.Customer;
 import com.example.tailor0.entity.HandbkM2P;
 import com.example.tailor0.entity.HandbkMerki;
@@ -27,13 +29,14 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Database(entities = {Order.class, Customer.class, ProductType.class, HandbkMerki.class, HandbkM2P.class}, version = 10, exportSchema = false)
+@Database(entities = {Order.class, Customer.class, ProductType.class, HandbkMerki.class, HandbkM2P.class, Cust2Merki.class}, version = 15, exportSchema = false)
 public abstract class TailorRoomDatabase extends RoomDatabase {
     public abstract OrderDao orderDao();
     public abstract CustomerDao customerDao();
     public abstract ProductTypeDao productTypeDao();
     public abstract HandbkMerkiDao handbkMerkiDao();
     public abstract HandbkM2PDao handbkM2PDao();
+    public abstract Cust2MerkiDao cust2MerkiDao();
 
     private static volatile TailorRoomDatabase INSTANCE;
     static Context mContext;
@@ -73,6 +76,7 @@ public abstract class TailorRoomDatabase extends RoomDatabase {
         private final ProductTypeDao productTypeDao;
         private final HandbkMerkiDao handbkMerkiDao;
         private final HandbkM2PDao handbkM2PDao;
+        private final Cust2MerkiDao cust2MerkiDao;
 
         PopulateDbAsync(TailorRoomDatabase db) {
             orderDao = db.orderDao();
@@ -80,16 +84,18 @@ public abstract class TailorRoomDatabase extends RoomDatabase {
             productTypeDao = db.productTypeDao();
             handbkMerkiDao = db.handbkMerkiDao();
             handbkM2PDao = db.handbkM2PDao();
+            cust2MerkiDao = db.cust2MerkiDao();
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
-            orderDao.deleteAll();
+//            orderDao.deleteAll();
 
             Order order = new Order();
 
+            order.id = 1;
             order.cust_id = 1;
             order.productType_id = 2;
             order.dateStart = new SimpleDateFormat("dd.MM.yyyy").format(new Date());
@@ -101,7 +107,7 @@ public abstract class TailorRoomDatabase extends RoomDatabase {
             // TODO: 27.05.2019 сделать проверку наличия записей в существующей базе и не удалять все
 
             /*Первоначальное заполнение таблицы типовых изделий*/
-            productTypeDao.deleteAll();
+//            productTypeDao.deleteAll();
             ProductType productType = new ProductType();
             productType.id = 1;
             productType.name = "Юбка";
@@ -115,7 +121,7 @@ public abstract class TailorRoomDatabase extends RoomDatabase {
             productTypeDao.insert(productType);
 
             /*Первоначальное заполнение таблицы клиентов*/
-            customerDao.deleteAll();
+//            customerDao.deleteAll();
             Customer customer = new Customer();
             customer.id = 1;
             customer.fio = "Петров";
@@ -125,6 +131,19 @@ public abstract class TailorRoomDatabase extends RoomDatabase {
             customer.id = 2;
             customer.fio = "Иванов";
             customerDao.insert(customer);
+
+            /*Первоначальное заполнение таблицы клиентов*/
+            Cust2Merki cust2Merki = new Cust2Merki();
+            cust2Merki.cust_id = 1;
+            cust2Merki.merka_id = 1;
+            cust2Merki.val = 10;
+            cust2MerkiDao.insert(cust2Merki);
+
+            cust2Merki = new Cust2Merki();
+            cust2Merki.cust_id = 1;
+            cust2Merki.merka_id = 2;
+            cust2Merki.val = 100;
+            cust2MerkiDao.insert(cust2Merki);
 
             /*Первоначальное заполнение таблицы мерок*/
             handbkMerkiDao.deleteAll();

@@ -8,7 +8,6 @@ import java.util.Date;
 
 @Entity(tableName = "orders")
 public class Order {
-
     @PrimaryKey(autoGenerate = true)
     public long id;
     public long cust_id;    /*id клиента*/

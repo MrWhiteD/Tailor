@@ -22,7 +22,9 @@ import com.example.tailor0.R;
 import com.example.tailor0.entity.FullOrder;
 import com.example.tailor0.entity.Order;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -70,7 +72,7 @@ public class OrdersFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = NewOrder.newIntent(getContext(), null);
-                startActivity(intent);
+                startActivityForResult(intent, NEW_ORDER_ACTIVITY_REQUEST_CODE);
             }
         });
         adapter = new OrderAdapter();
@@ -117,7 +119,7 @@ public class OrdersFragment extends Fragment {
         intent.putExtra("cust_fio", fullOrder.fio);
         intent.putExtra("productType_id", fullOrder.productType_id);
         intent.putExtra("productType_name", fullOrder.prod_name);
-        startActivityForResult(intent, 2);
+        startActivityForResult(intent, UPD_ORDER_ACTIVITY_REQUEST_CODE);
     }
 
     @Override
@@ -137,6 +139,8 @@ public class OrdersFragment extends Fragment {
                 ordersViewModel.insert(order);
             }
             if (requestCode == UPD_ORDER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+                order.cust_id = data.getLongExtra("cust_id", 0);
+//                order.productType_id = 2;
                 order.id = data.getLongExtra("orderId", 0);
                 ordersViewModel.update(order);
             }

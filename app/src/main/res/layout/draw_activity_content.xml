@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/ll1"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:weightSum="1.0"
+        >
+
+        <LinearLayout
+            android:id="@+id/view_drawing_pad"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#00AB1B1B"
+            android:orientation="vertical"></LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout >

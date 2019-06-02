@@ -92,9 +92,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_customers) {
             toolbar.setTitle("Клиенты");
             fragmentTransaction.replace(R.id.container,fcustomers);
-        } else if (id == R.id.nav_sketchers) {
-            toolbar.setTitle("Эскизы");
-            fragmentTransaction.replace(R.id.container,fsketches);
         } else if (id == R.id.nav_dictm) {
             toolbar.setTitle("Справочник мерок");
             fragmentTransaction.replace(R.id.container,fhandbk_merki);
